@@ -1,0 +1,5 @@
+#Define ns for our mysql deployment
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: mysql

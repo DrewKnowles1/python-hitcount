@@ -1,0 +1,53 @@
+#Mysql deployment/service to expose it
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      securityContext:
+          fsGroup: 2000
+      containers:
+        - image: mysql:8.0
+          name: mysql
+          env:
+          #pull in our password from the secret we created earlier
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+          securityContext:
+            allowPrivilegeEscalation: false
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: mysql
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql

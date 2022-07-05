@@ -1,0 +1,61 @@
+#deploy/expose python api
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-api
+  namespace: web
+spec:
+  selector:
+    matchLabels:
+      app: python-api
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: python-api
+    spec:
+      securityContext:
+          runAsUser: 1000
+          runAsGroup: 3000
+          fsGroup: 2000
+      containers:
+      #pulling from my public dockerhub, using image digest to be sure we pull same image each time 
+      - image: docker.io/aknowles99/python-api@sha256:dfe356b49dfcab6bd8150b1bd090ee92de135d738dd8fad256ceb6caf86b80bf
+        name: python-api
+        env:   
+        #application reads some config from env vars, passing these in   
+        - name: MYSQLPORT
+          value: "3306"
+        - name: MYSQLHOST
+          value: mysql.mysql.svc.cluster.local
+        #Just referencing the same secret that mysql is using 
+        #again this would not go to production, 
+        #my prefered choice would be a vault sidecar providing secrets 
+        - name: MYSQLPWD
+          valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password
+        ports:
+        - containerPort: 5000
+          name: python-api
+        securityContext:
+          allowPrivilegeEscalation: false
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-api
+  namespace: web
+spec:
+    selector:
+      app: python-api
+    ports:
+      - name: python-api
+        protocol: "TCP"
+       # Port accessible inside cluster
+        port: 5000
+       # Port to forward to inside the pod
+        targetPort: python-api

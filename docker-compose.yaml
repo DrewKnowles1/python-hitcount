@@ -1,0 +1,19 @@
+#redundant docker compose file i was using for local development of the python api, 
+#just keeping it arounf incase i need it for testing 
+version: "3"
+
+services:
+  mysql-pyhton:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+       - 33060:3306
+volumes:
+  mysql:
+    
+
+
