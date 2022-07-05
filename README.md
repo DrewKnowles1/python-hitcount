@@ -3,7 +3,8 @@
 <h3>Docker build/push example for myself</h3>
 <br />
 
-``` docker build -t flask-application --cache-from flask-application --build-arg BUILDKIT_INLINE_CACHE=1 .
+```
+docker build -t flask-application --cache-from flask-application --build-arg BUILDKIT_INLINE_CACHE=1 .
 docker tag  4c29479e1c55 aknowles99/python-api:<version>
 docker push <repo>/python-api:<version>
 
@@ -28,7 +29,8 @@ Manifests below should be able to be installed onto any cluster, managed/baremet
 <h3>deploy mysql to kubernetes:</h3>
 <br />
 
-``` kubectl apply -f k8s-manifests/mysql-manifests/mysql-ns.yaml
+``` 
+ kubectl apply -f k8s-manifests/mysql-manifests/mysql-ns.yaml
  kubectl apply -f k8s-manifests/mysql-manifests/mysql-pv-pvc.yaml
  kubectl apply -f k8s-manifests/mysql-manifests/mysql-secret.yaml
  kubectl apply -f k8s-manifests/mysql-manifests/mysql.yaml
@@ -36,7 +38,8 @@ Manifests below should be able to be installed onto any cluster, managed/baremet
 <br />
 
 verify pod is running:
-```❯ k get po -n mysql
+```
+❯ k get po -n mysql
 NAME                    READY   STATUS    RESTARTS   AGE
 mysql-fb59fb77f-ss48r   1/1     Running   0          36s
 ```
@@ -69,14 +72,16 @@ again though, id prefer to use a managed DB from a cloud provider most of the ti
 <br />
 please ensure you have already deployed mysql first, as the deployment will go into crashloopback without it
 
-``` kubectl apply -f k8s-manifests/python-api-manifests/web-ns.yaml
+``` 
+ kubectl apply -f k8s-manifests/python-api-manifests/web-ns.yaml
  kubectl apply -f k8s-manifests/python-api-manifests/mysql-secret.yaml
  kubectl apply -f k8s-manifests/python-api-manifests/python-api.yaml
  ```
 <br />
 
 verify pod is running:
-```❯ k get po -n web
+```
+❯ k get po -n web
 NAME                          READY   STATUS    RESTARTS   AGE
 python-api-7cf448bbdf-2m48m   1/1     Running   0          43s
 ```
@@ -115,7 +120,8 @@ mysql:
 <br />
 
 output should be something like: 
-``` kubectl port-forward -n mysql deployment/mysql :3306
+``` 
+ kubectl port-forward -n mysql deployment/mysql :3306
  Forwarding from 127.0.0.1:43787 -> 3306
  Forwarding from [::1]:43787 -> 3306
  ```
@@ -154,7 +160,8 @@ install kind:
 https://kind.sigs.k8s.io/docs/user/quick-start/
 <br />
 
-```kind create cluster --config=kind/cluster-spec.yaml
+```
+ kind create cluster --config=kind/cluster-spec.yaml
 
  kubectl apply -f k8s-manifests/mysql-manifests/mysql-ns.yaml
  kubectl apply -f k8s-manifests/mysql-manifests/mysql-pv-pvc.yaml
@@ -165,7 +172,7 @@ https://kind.sigs.k8s.io/docs/user/quick-start/
  kubectl apply -f k8s-manifests/python-api-manifests/mysql-secret.yaml
  kubectl apply -f k8s-manifests/python-api-manifests/python-api.yaml
 
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 ```
 <br />
 
