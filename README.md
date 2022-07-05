@@ -17,7 +17,9 @@ due to differences in ingress implimentation across cloud providers etc, ive cho
 https://kind.sigs.k8s.io/
 <br />
 to stand up a local kind cluster, install kind from above, and run:<br />
+
 ```kind create cluster --config=kind/cluster-spec.yaml```
+
 <br />
 Manifests below should be able to be installed onto any cluster, managed/baremetal, GKE/EKS etc, but the best practices for ingress may change
 
