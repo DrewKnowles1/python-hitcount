@@ -102,13 +102,15 @@ python-api:
 output should be something like: 
 <br />
 
-``` kubectl port-forward -n web deployment/python-api :5000
+``` 
+ kubectl port-forward -n web deployment/python-api :5000
  Forwarding from 127.0.0.1:39227 -> 5000
  Forwarding from [::1]:39227 -> 5000`
  ```
 
 Use the port it provides you to hit the loopback and incriment the counter:
-```❯ curl 127.0.0.1:<your port from proxy command above>/count
+```
+  ❯ curl 127.0.0.1:<your port from proxy command above>/count
   33
   ```
 <br />
