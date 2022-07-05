@@ -5,7 +5,7 @@
 
 ```
 docker build -t flask-application --cache-from flask-application --build-arg BUILDKIT_INLINE_CACHE=1 .
-docker tag  4c29479e1c55 aknowles99/python-api:<version>
+docker tag  <version> aknowles99/python-api:<version>
 docker push <repo>/python-api:<version>
 
 ```
