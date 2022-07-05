@@ -12,6 +12,17 @@ docker push <repo>/python-api:<version>
 <br />
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<br />
+<h3>Pre-requisites</h3>
+
+-docker
+-kind
+-python
+-kubectl
+
+<br />
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 <h3>kind:</h3>
 <br />
@@ -51,14 +62,14 @@ deploy in the above order, as if you just do a:
 ``` kubectl apply -f . ```
 
 <br />
-in the relvent folder you may run into some issues with things such as the secrets/pvc/pv applying before the sql deployment starts up, which would then necesitate deleting/recreating the mysql pod.
+in the relevent folder you may run into some issues with things such as the secrets/pvc/pv applying before the sql deployment starts up, which would then necesitate deleting/recreating the mysql pod.
 <br />
 Persistance:<br />
-In this instance, ive chosen to run mysql in kubernetes, backed with a persistent volume/volume claim, just in order to be able to hand over a complete solution with no external infra dependencies. hitcount record will persist between deployments, even if the persistent volume is deleted, provided the path the persistent volume points to is the same on next deployment.
+In this instance, ive chosen to run mysql in kubernetes, backed with a persistent volume/volume claim, just in order to be able package a complete solution with no external infra dependencies. hitcount record will persist between deployments, even if the persistent volume is deleted, provided the path the persistent volume points to is the same on next deployment.
 <br />
 ***note: this will not persist through cluster deletions, only through pod/pv/pvc deletions, again in a perfect world i would be using a managed cloud database service 
 <br />
-Again, in the real world, i wouldnt likely use a nodes hostpath to persist data, many different cloud providers provide, such as EBS/EFS: 
+Again, in the real world, i wouldnt likely use a nodes hostpath to persist data, id use one of the sttorage options many different cloud providers provide, such as EBS/EFS: 
 https://aws.amazon.com/premiumsupport/knowledge-center/eks-persistent-storage/
 <br />
 again though, id prefer to use a managed DB from a cloud provider most of the time.
@@ -183,7 +194,8 @@ you may have to wait a little while before deploying this next manifest, as ngin
 <br />
 
 
-``` k get po -n ingress-nginx
+``` 
+k get po -n ingress-nginx
 NAME                                        READY   STATUS      RESTARTS   AGE
 ingress-nginx-admission-create-2qhhk        0/1     Completed   0          2m1s
 ingress-nginx-admission-patch-dq7vv         0/1     Completed   0          2m1s
@@ -203,6 +215,6 @@ query API:<br />
 ```curl --header "Host: api.com" localhost:80/count```
 
 <br />
-the above curl works, as kind is configureed to bind the hostport, to the container port thats running kubernetes (kind - Kubernetes-IN-Docker)
+the above curl works, as kind is configured to bind the hostport, to the container port thats running kubernetes (kind - Kubernetes-IN-Docker)
 <br />
 As mentioned above, the api will persist the counter upon pod deletion of either mysql or the python api itself, as mysql is backed by a persistent volume
